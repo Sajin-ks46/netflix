@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+    </script>
+    <title></title>
+</head>
+<style>
+.pay{
+   text-align: center;
+   margin-top: 200px;
+}
+</style>
+
+<body>
+    <div class="pay">
+   <h1 id="amt">Amount: ₹{{order.amount}}<h1>
+    <h1 id="ids">Trans Id: {{order.id}}<h1>
+    <button class="btn btn-warning btn-block btn-md" id="rzp-button1">Pay Now</button>
+    </div>
+</body>
+<script>
+    let amount=document.getElementById("amt").innerHTML;
+     let id=document.getElementById("ids").innerHTML;
+var options = {
+    "key": "rzp_test_fxawX80Ib3XCcm", // Enter the Key ID generated from the Dashboard
+    "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Acme Corp",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+    verifypay(response,amount,id)
+    },
+    
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9999999999"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.on('payment.failed', function (response){
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+});
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+
+function verifypay(response,amount,id){
+console.log(response,"response")
+    console.log("toamnt",amount)
+    $.post("/verify",
+     data={
+        response,amount,id
+     },
+     function (data,status){
+        console.log(data);
+     });
+}
+</script>
+</html>

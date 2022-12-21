@@ -1,0 +1,24 @@
+
+.card img {
+    height: 200px;
+}
+.container{
+   background-color: #336666;
+}
+.text{
+position: absolute;
+top: 900px;
+margin-left: 450px;
+padding-top: 10px;
+border-bottom-style: solid;
+border-bottom-width: 1.1px;
+border-top-style: solid;
+border-top-width: 1.1px;
+
+
+}
+.reg li{
+    text-decoration: none;
+    color: white;
+
+}
